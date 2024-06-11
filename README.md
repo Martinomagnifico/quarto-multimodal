@@ -4,7 +4,7 @@
 
 A quarto extension for for [Reveal.js](https://revealjs.com) to show content in modal windows.
 
-[<img src="https://martinomagnifico.github.io/reveal.js-multimodal/screenshot.png" width="100%">](https://martinomagnifico.github.io/reveal.js-multimodal/demo/demo.html)
+[<img src="https://martinomagnifico.github.io/reveal.js-multimodal/screenshot.png" width="100%">](https://martinomagnifico.github.io/quarto-multimodal/demo.html)
 
 Multimodal can be used as a lightbox or actual modal to showcase images, video or HTML content from wihin a presentation. It can be triggered from text links, images, or buttons, or automatically when a slide is shown.
 
