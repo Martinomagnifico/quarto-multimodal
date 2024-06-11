@@ -1,0 +1,627 @@
+---
+format:
+  revealjs:
+    code-overflow: wrap
+    code-line-numbers: false
+    center: true
+    theme: dark
+    navigation-mode: vertical
+    transition: slide
+    background-transition: fade
+    controls-layout: bottom-right
+    chalkboard: false
+    menu: false
+    css: demo_files/assets/css/style.css
+    section-divs: false
+    link-external-newwindow: true
+
+revealjs-plugins:
+  - multimodal
+
+---
+
+# Multimodal {data-modal-type="html" data-modal-url="#titlediv"}
+For Reveal.js and Quarto
+
+::: {#titlediv .hidden}
+# Multimodal
+For Reveal.js and Quarto
+:::
+
+
+
+
+# What can you use it for?
+
+----
+
+Multimodal can be used as a lightbox or actual modal to showcase images, video or HTML content. It can be triggered from text links, images, or buttons, or automatically when a slide is shown.
+
+----
+
+* Use it to show [an image](#){data-modal-type="image" data-modal-url="demo_files/assets/img/1.jpg"} in a window
+* Use it to show [a video](#){data-modal-type="video" data-modal-url="demo_files/assets/vid/radar.mp4"} in a window
+* Use it to show [HTML content](#){data-modal-type="html" data-modal-url="#somehiddendiv"} in a window
+
+::: {#somehiddendiv .hidden}
+<h2>Example of HTML content</h2>
+This is just content that is normally hidden.
+:::
+
+
+# Modal behaviour
+
+----
+
+## Modal size
+
+* Content in modals will display at its original size, but is constrained to the maximum size of the modal.
+* The maximum size of modals is the size to the viewport, *minus the margin* as set in the Reveal config.
+* The minimum size of HTML modals is 100x100 pixels. This can be set in the config.
+
+
+## Triggers
+A triggering element needs at least a `data-modal-type`.
+
+* From [a data-modal-url](#){data-modal-type="image" data-modal-url="demo_files/assets/img/1.jpg"} in an anchor tag
+* From [an href attribute](demo_files/assets/img/2.jpg){data-modal-type="image"} in an anchor tag
+
+```md
+* From [a data-modal-url](#){data-modal-type="image" data-modal-url="demo_files/assets/img/1.jpg"} in an anchor tag
+* From [an href attribute](demo_files/assets/img/2.jpg){data-modal-type="image"} in an anchor tag
+```
+
+Note: If the modal-content is not valid or can’t be found, no modal will be opened.
+
+
+## Navigation changes
+
+* The `arrow keys` will close the modal *and* go to the next slide
+* The `space bar` or `escape key` will only close the modal
+
+::: {.example}
+[Show modal](#){data-modal-type="image" data-modal-url="demo_files/assets/img/2.jpg"}
+:::
+
+Click the link above and then the `arrow keys`, `space bar` or `escape key`: the modal will be closed in all cases, but only arrow keys will navigate.
+
+
+
+
+## Slide modals {data-modal-type="image" data-modal-url="demo_files/assets/img/4.jpg"}
+To automatically open a modal when a slide is shown, add the `data-modal-type` and `data-modal-url` attributes to the section element.
+
+```md
+## Slide modals {data-modal-type="image" data-modal-url="demo_files/assets/img/4.jpg"}
+<!-- Slide content here -->
+```
+
+
+## Events
+There are 4 events that may help you do things in your modals: `multimodal:show`, `multimodal:shown`, `multimodal:hide`, and `multimodal:hidden`. Use it like this:
+
+```js
+deck.addEventListener("multimodal:shown", async (event) => {
+  const triggerInfo = event.detail.trigger;
+  console.log("Trigger type:", triggerInfo.dataset.modalType);
+});
+```
+Details are in `event.detail`. It references the trigger, the modal and more. A `.multimodal-open` class is also added to the `.reveal` element so that you can hook into this with CSS.
+
+
+
+## Override navigation {data-background="#260505"}
+To prevent the user from accidentally navigating to another slide while the modal is open, you can add the `data-modal-navblock` attribute to the triggering element.
+
+::: {.example}
+[Show modal](#){data-modal-type="image" data-modal-url="demo_files/assets/img/3.jpg" data-modal-navblock="true"}
+:::
+
+```md
+[Show modal](#){data-modal-type="image" data-modal-url="demo_files/assets/img/3.jpg" data-modal-navblock="true"}
+```
+Note that this blocks all keyboard navigation, but the escape key or any close buttons will still close the modal. It will NOT work in scroll mode.
+
+
+
+
+# Styling
+
+----
+
+The modal is styled with CSS variables, which are controlled through the Reveal.js options (see [Global options](#global-options)). Some of these options can also be set per trigger:
+
+
+## Overlay {data-background="white"}
+
+Add a `data-modal-overlaycolor` attribute to the trigger to change the overlay color on a per-trigger basis.
+
+You may want to do this on slides that have a different background color.
+
+::: {.example}
+[Show modal](#){data-modal-type="image" data-modal-url="demo_files/assets/img/5.jpg" data-modal-overlaycolor="rgba(150, 50, 0, 0.5)"}
+:::
+
+```md
+[Show modal](#){data-modal-type="image" data-modal-url="demo_files/assets/img/5.jpg" data-modal-overlaycolor="rgba(150, 50, 0, 0.5)"}
+```
+
+
+
+## Background and padding
+
+::: {.example .small}
+[![](demo_files/assets/img/svgexample.svg)](#){data-modal-type="image" data-modal-background="gray" data-modal-padding="1em"}
+:::
+
+```md
+[![](demo_files/assets/img/svgexample.svg)](#){data-modal-type="image" data-modal-background="gray" data-modal-padding="1em"}
+```
+
+The background color and padding can be set with the `data-modal-background` and `data-modal-padding` attributes. When using SVG's, this may come in handy. Both attributes can also be globally set in the options.
+
+
+
+
+## Passing extra classes
+A triggering element can pass extra classes to the modal with `data-modal-class`. You can use this class for example for styling.
+
+<style>
+  .special { --mm-bordercolor: red;}
+  .special p, .special h2 { color: red;}
+</style>
+
+::: {.example}
+[Show modal](#){data-modal-type="html" data-modal-url="#somehiddendiv" data-modal-class="special"}
+:::
+
+```md
+[Show modal](#){data-modal-type="html" data-modal-url="#somehiddendiv" data-modal-class="special"}
+
+<style>
+  .special { --mm-bordercolor: red;}
+  .special p, .special h2 { color: red;}
+</style>
+```
+Note: You can add multiple classes. Divide them by space or comma.
+
+
+
+
+
+# Image modals
+
+## Image modal from a text link
+
+::: {.example}
+[Show modal](#){data-modal-type="image" data-modal-url="demo_files/assets/img/2.jpg"}
+:::
+
+```md
+[Show modal](#){data-modal-type="image" data-modal-url="demo_files/assets/img/2.jpg"}
+```
+
+As shown before, the href attribute can also be used.
+
+
+## Image modal from a clickable image
+
+::: {.example}
+[![Some glasses](demo_files/assets/img/3-small.jpg)](#){data-modal-type="image" data-modal-url="demo_files/assets/img/3.jpg"}
+[![Leaves](demo_files/assets/img/4-small.jpg)](demo_files/assets/img/4.jpg){data-modal-type="image"}
+:::
+
+```md
+[![Some glasses](demo_files/assets/img/3-small.jpg)](#){data-modal-type="image" data-modal-url="demo_files/assets/img/3.jpg"}
+[![Leaves](demo_files/assets/img/4-small.jpg)](demo_files/assets/img/4.jpg){data-modal-type="image"}
+```
+
+In this example, a small image is linked to a (different) large image in the modal.
+
+
+
+
+## Image modal from a clickable image, with the same image used
+
+::: {.example .small}
+[![](demo_files/assets/img/5.jpg)](#){data-modal-type="image"}
+:::
+
+```md
+[![](demo_files/assets/img/5.jpg)](#){data-modal-type="image"}
+```
+
+When a data-modal-url attribute is *not added*, and the link has an image as direct child of it, then that image will be used for the modal. This example limits the size of the image inside the outlined box.
+
+
+
+# Video modals
+
+## Video modal from a text link
+
+::: {.example}
+[Show modal](#){data-modal-type="video" data-modal-url="demo_files/assets/vid/abstract.mp4"}
+:::
+
+```md
+[Show modal](#){data-modal-type="video" data-modal-url="demo_files/assets/vid/abstract.mp4"}
+```
+
+As shown before, the href attribute can also be used.
+
+
+## Video modal from a clickable image
+
+::: {.example .small}
+[![](demo_files/assets/img/radar.jpg)](#){.videothumb data-modal-type="video" data-modal-url="demo_files/assets/vid/radar.mp4"}
+:::
+
+```md
+[![](demo_files/assets/img/radar.jpg)](#){.videothumb data-modal-type="video" data-modal-url="demo_files/assets/vid/radar.mp4"}
+```
+
+As shown before, the href attribute can also be used.
+
+
+
+# HTML modals
+
+## HTML modal from a local ID
+
+::: {.example}
+[Link to an ID](#){data-modal-type="html" data-modal-url="#somehiddendiv"}
+:::
+
+```md
+[Link to an ID](#){data-modal-type="html" data-modal-url="#somehiddendiv"}
+
+::: {#somehiddendiv .hidden}
+## Example of HTML content
+This is just content that is normally hidden.
+:::
+```
+
+::: {#longhiddendiv .hidden}
+<h2>Example of long HTML content</h2>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis pretium cursus. Sed vel tincidunt dui. Aenean accumsan eget lectus eget aliquam. Vivamus risus neque, finibus at ex at, lobortis dignissim sem. Nunc euismod euismod justo, eget condimentum urna efficitur eleifend. Quisque ornare velit ac lectus mollis eleifend. Quisque faucibus id velit at eleifend. Sed sed nunc dui. Nullam eget tempor dolor.
+
+Etiam tortor erat, fringilla ut sem vitae, interdum euismod dolor. Phasellus pellentesque at augue et pellentesque. Etiam non commodo ex, quis egestas risus. Cras ornare molestie lacus, ac gravida justo suscipit vel. Etiam consectetur est tortor, eu ornare augue tempus a. Mauris venenatis dapibus magna sit amet gravida. Pellentesque interdum nibh vel arcu tristique condimentum. Maecenas tincidunt sem eget dui posuere commodo.
+
+Phasellus eu risus lacinia, imperdiet felis vel, condimentum est. Fusce tristique nisi lacus, non placerat turpis scelerisque id. Etiam massa urna, venenatis ac lacus sit amet, faucibus vestibulum metus. Nulla facilisi. Vestibulum porttitor varius dapibus. In sit amet justo condimentum, lacinia sapien non, lacinia odio. Nullam sollicitudin sapien eget turpis condimentum, nec aliquet sem venenatis. Sed efficitur risus quis neque fringilla, at fringilla purus varius.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam venenatis pretium cursus. Sed vel tincidunt dui. Aenean accumsan eget lectus eget aliquam. Vivamus risus neque, finibus at ex at, lobortis dignissim sem. Nunc euismod euismod justo, eget condimentum urna efficitur eleifend. Quisque ornare velit ac lectus mollis eleifend. Quisque faucibus id velit at eleifend. Sed sed nunc dui. Nullam eget tempor dolor.
+:::
+
+
+Long content [like this](#){data-modal-type="html" data-modal-url="#longhiddendiv" data-modal-class="textleft"} will be scrollable in the modal.
+
+
+
+## HTML modal from an HTML file
+The HTML content will use local styles.
+
+::: {.example}
+[Link to an HTML file](#){data-modal-type="html" data-modal-url="demo_files/externalhtml.html" data-modal-class="textleft"}
+:::
+
+```md
+[Link to an HTML file](#){data-modal-type="html" data-modal-url="demo_files/externalhtml.html" data-modal-class="textleft"}
+```
+
+
+## HTML modal from a MarkDown file
+The HTML content will use local styles.
+
+::: {.example}
+[Link to a MarkDown file](#){data-modal-type="html" data-modal-url="demo_files/externalmd.md" data-modal-class="textleft"}
+:::
+
+```md
+[Link to a MarkDown file](#){data-modal-type="html" data-modal-url="demo_files/externalmd.md" data-modal-class="textleft"}
+```
+
+Markdown is converted to HTML when the modal is opened. It does not support Reveal.js’ or Quarto element attributes.
+
+
+
+## Modal from an iframe
+Both data-attribute and href attribute methods are shown.
+
+::: {.example}
+[Link to an external website](https://www.wikipedia.org){data-modal-type="iframe"}
+[Link to a Youtube video](#){data-modal-type="iframe" data-modal-url="https://www.youtube.com/embed/dQw4w9WgXcQ?&autoplay=1"}
+:::
+
+```md
+[Link to an external website](https://www.wikipedia.org){data-modal-type="iframe"}
+[Link to a Youtube video](#){data-modal-type="iframe" data-modal-url="https://www.youtube.com/embed/dQw4w9WgXcQ"}
+```
+
+
+
+# Global options
+
+The options below have user configurable options. In a regular Reveal.js presentation, these can be set through JavaScript, but Quarto makes it configurable through YAML options.
+
+::: columns
+::: {.column style="font-size: 2rem"}
+1. background
+2. bordercolor
+3. borderwidth
+4. closebuttonhtml
+5. htmlminwidth
+6. htmlminheight
+7. overlaycolor
+8. padding
+9. radius
+:::
+
+::: {.column style="font-size: 2rem"}
+10. scalecorrection
+11. shadow
+12. slidemodalevent
+13. speed
+14. videoautoplay
+15. videocontrols
+16. videoautohide
+17. zoom
+18. zoomfrom
+:::
+:::
+
+##
+### Option 1: background
+
+This sets the standard background color of the modal. If the padding is set to 0 (default for images and video’s), you will not see it. HTML, iframe and media (images and video) are set separately.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      background:
+        html: "var(--r-background-color)"
+        iframe: "var(--r-background-color)"
+        media: "white"
+```
+
+
+##
+### Option 2: bordercolor
+This sets the border color around the dialog box.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      bordercolor: "white"
+```
+
+
+##
+### Option 3: borderwidth
+
+This sets the border width around the dialog box.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      borderwidth: "1px"
+```
+
+
+##
+### Option 4: closebuttonhtml
+
+Allows you to add your own HTML for the close button. Can be any HTML, but will need a `data-modal-close` attribute.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      closebuttonhtml: "" # Can be changed to something like <button class="mm-close" type="button" aria-hidden="true" aria-label="Close" data-modal-close="">X</button>
+```
+
+
+##
+### Option 5: htmlminwidth
+
+This sets the minimum width of the HTML modals. The default is 100 pixels.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      htmlminwidth: "100px"
+```
+
+
+##
+### Option 6: htmlminheight
+
+This sets the minimum height of the HTML modals. The default is 100 pixels.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      htmlminheight: "100px"
+```
+
+
+##
+### Option 7: overlaycolor
+
+This sets the color of the overlay. Some people may call it a backdrop. The default is `"rgba(0, 0, 0, 0.30)"`. That's like 30% black. You can use any CSS color here, but it’s best to use rgba for transparency.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      overlaycolor: "rgba(0, 0, 0, 0.30)"
+```
+
+
+##
+### Option 8: padding
+
+This sets the standard padding of modals. HTML, iframe and media (images and video) are set separately.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      padding:
+        html: "1em"
+        iframe: "0"
+        media: "0"
+```
+It can also be set per-trigger with `data-modal-padding`.
+
+
+##
+### Option 9: radius
+
+This sets the radius of the dialog box.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      radius: "0.5em"
+```
+
+
+##
+### Option 10: scalecorrection
+
+This sets a scale correction, used in the border width and the close button. On small devices or screens, the border and close button may be too small. This option scales them back up.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      scalecorrection: true
+```
+
+
+##
+### Option 11: shadow
+
+This sets the shadow around the dialog box. The default is a soft but dark shadow.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      shadow: "0 0.5em 0.75em 0.5em rgba(0, 0, 0, 0.25)"
+```
+
+
+##
+### Option 12: slidemodalevent
+
+This sets the event that triggers the modal on a slide, if that slide is set to show a modal.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      slidemodalevent: "slidetransitionend"
+```
+
+
+##
+### Option 13: speed
+
+This sets the speed of the modal opening and closing.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      speed: 300
+```
+
+
+##
+### Option 14: videoautoplay
+
+This sets the video to autoplay when opened.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      videoautoplay: true
+```
+
+
+##
+### Option 15: videocontrols
+
+This sets the video to show controls when opened.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      videocontrols: true
+```
+
+
+##
+### Option 16: videoautohide
+
+This sets the modal to close when the video in it ends.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      videoautohide: true
+```
+
+
+##
+### Option 17: zoom
+
+This sets the modal to zoom in when opened.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      zoom: true
+```
+
+
+##
+### Option 18: zoomfrom
+
+This sets the starting zoom factor of the modal when it is opened. It then zooms to factor 1.
+
+``` yaml
+format:
+  revealjs:
+    //...
+    multimodal:
+      zoomfrom: 0.90
+```

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>play</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="play">
+            <circle id="Oval" fill-opacity="0.7" fill="#FFFFFF" cx="36" cy="36" r="36"></circle>
+            <polygon id="Polygon" fill="#000000" transform="translate(36, 36) rotate(-270) translate(-36, -36)" points="36 11.0045576 57.6466881 48.4977212 14.3533119 48.4977212"></polygon>
+        </g>
+    </g>
+</svg>
