@@ -171,8 +171,6 @@ format:
       bordercolor: "white"
       borderwidth: "1px"
       closebuttonhtml: ''
-      cssautoload: true
-      csspath: ''
       htmlminwidth: "100px"
       htmlminheight: "100px"
       overlaycolor: "rgba(0, 0, 0, 0.30)"
