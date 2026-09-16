@@ -72,6 +72,15 @@ Note: If the modal-content is not valid or can’t be found, no modal will be op
 
 * The `arrow keys` will close the modal *and* go to the next slide
 * The `space bar` or `escape key` will only close the modal
+* A video modal uses the `space bar` to play and pause instead
+
+In fullscreen, a browser normally uses the `escape key` to leave fullscreen, and the presentation never sees it. In Chrome and Edge, Multimodal asks for that key while a modal is open, so the first press closes the modal and the next one leaves fullscreen. Holding it down still leaves fullscreen straight away. This needs `localhost` or `https`. Safari and Firefox do not allow it, so there the first press leaves fullscreen and the second closes the modal.
+
+Multimodal hands these keys to the modal through Reveal's `keyboardCondition`, which it sets when the presentation loads, and it keeps any `keyboardCondition` of your own. If you change `keyboardCondition` later with `Reveal.configure`, then the modal no longer gets its keys.
+
+### Focus
+
+When a modal opens, focus moves into it, and the rest of the presentation cannot be clicked or tabbed to until it closes. Focus then goes back to the element that had it, usually the trigger. If you style triggers on focus, then use `:focus-visible`, so that a trigger that was clicked does not keep its focus style.
 
 
 ### Slide modals
